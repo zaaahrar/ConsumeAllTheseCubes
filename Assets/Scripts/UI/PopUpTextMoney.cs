@@ -19,6 +19,7 @@ public class PopUpTextMoney : MonoBehaviour
         endPosition.y += _indentedY;
 
         transformObject.DOMove(endPosition, _lifeTime);
+        Debug.Log($"PopUpText: {endPosition}, {_lifeTime}");
         Destroy(gameObject, _lifeTime);
     }
 

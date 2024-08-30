@@ -14,7 +14,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OnDestroy()
     {
-        transform.DOKill();
+        _pausePanel.transform.DOKill();
     }
 
     public void OpenPanel() => StartCoroutine(OpeningPanel());
@@ -37,6 +37,7 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 1;
         _pausePanel.transform.DOLocalMoveY(_loveringPositionY, _durationAnimate);
+        Debug.Log($"OpenPanel: {_loveringPositionY}, {_durationAnimate}");
         yield return new WaitForSeconds(_durationAnimate);
         _pausePanel.SetActive(false);
     }
@@ -45,6 +46,7 @@ public class PauseMenu : MonoBehaviour
     {
         _pausePanel.SetActive(true);
         _pausePanel.transform.DOLocalMoveY(_liftingPositionY, _durationAnimate);
+        Debug.Log($"ClosePanel: {_liftingPositionY}, {_durationAnimate}");
         yield return new WaitForSeconds(_durationAnimate);
         Time.timeScale = 0;
     }

@@ -27,6 +27,7 @@ public class CubeFall : MonoBehaviour
 
         transform.position = Vector3.MoveTowards(transform.position, funnel.Center.position, _speed * Time.deltaTime);
         transform.DORotateQuaternion(rotation, _rotationDuration);
+        Debug.Log($"Cube Fall: {rotation}, {_rotationDuration}");
 
 
         while (_cube.IsCollected == false)
@@ -38,6 +39,11 @@ public class CubeFall : MonoBehaviour
     }
 
     private void OnDestroy()
+    {
+        transform.DOKill();
+    }
+
+    private void OnDisable()
     {
         transform.DOKill();
     }
