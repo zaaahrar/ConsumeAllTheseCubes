@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class AudioEffects : MonoBehaviour
 {
+    private const int DefaultValue = 1;
+    private const string EffectsVolumeKey = "EffectsVolume";
+
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _soundKnock;
     [SerializeField] private AudioClip _soundCollectCube;
     [SerializeField] private AudioClip _soundCubeBuilding;
+
+    private void Start() => _audioSource.volume = PlayerPrefs.GetFloat(EffectsVolumeKey, DefaultValue);
 
     public void PlaySoundKnock()
     {
