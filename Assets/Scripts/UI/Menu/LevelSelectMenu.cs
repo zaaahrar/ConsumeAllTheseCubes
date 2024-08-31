@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelSelectMenu : MonoBehaviour
@@ -9,6 +8,8 @@ public class LevelSelectMenu : MonoBehaviour
 
     [SerializeField] private Button _nextButton;
     [SerializeField] private Button _backButton;
+    [SerializeField] private SceneChanger _sceneChanger;
+    [SerializeField] private UIAudioFeedback _audioFeedback;
 
     [SerializeField] private TMP_Text _pageCounterText;
 
@@ -30,19 +31,22 @@ public class LevelSelectMenu : MonoBehaviour
 
     public void ClickNext()
     {
+        _audioFeedback.PlaySoundClick();
         _page++;
         Refresh();
     }
 
     public void ClickBack()
     {
+        _audioFeedback.PlaySoundClick();
         _page--;
         Refresh();
     }
 
     public void StartLevel(int level)
     {
-        SceneManager.LoadScene(1); //poprivut
+        _audioFeedback.PlaySoundClick();
+        _sceneChanger.LoadGameScene();
     }
 
     public void CheckLevels()

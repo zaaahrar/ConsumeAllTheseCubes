@@ -8,6 +8,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject _pausePanel;
     [SerializeField] private SceneChanger _sceneChanger;
     [SerializeField] private float _durationAnimate;
+    [SerializeField] private UIAudioFeedback _audioFeedback;
 
     private float _liftingPositionY = -135;
     private float _loveringPositionY = 865;
@@ -24,18 +25,21 @@ public class PauseMenu : MonoBehaviour
     public void ExitMenu()
     {
         Time.timeScale = 1;
+        _audioFeedback.PlaySoundClick();
         _sceneChanger.LoadMenuScene();
     }
 
     public void ResetLevel()
     {
         Time.timeScale = 1;
+        _audioFeedback.PlaySoundClick();
         _sceneChanger.LoadGameScene();
     }
 
     private IEnumerator ClosingPanel()
     {
         Time.timeScale = 1;
+        _audioFeedback.PlaySoundClick();
         _pausePanel.transform.DOLocalMoveY(_loveringPositionY, _durationAnimate);
         Debug.Log($"OpenPanel: {_loveringPositionY}, {_durationAnimate}");
         yield return new WaitForSeconds(_durationAnimate);
@@ -45,6 +49,7 @@ public class PauseMenu : MonoBehaviour
     private IEnumerator OpeningPanel()
     {
         _pausePanel.SetActive(true);
+        _audioFeedback.PlaySoundPanelsActive();
         _pausePanel.transform.DOLocalMoveY(_liftingPositionY, _durationAnimate);
         Debug.Log($"ClosePanel: {_liftingPositionY}, {_durationAnimate}");
         yield return new WaitForSeconds(_durationAnimate);

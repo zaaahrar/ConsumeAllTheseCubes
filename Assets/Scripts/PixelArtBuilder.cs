@@ -18,6 +18,7 @@ public class PixelArtBuilder : MonoBehaviour
     [SerializeField] private float _delaySpawnNumber;
     [SerializeField] private float _cubeFlightTime;
     [SerializeField] private float _delayBoomEffect;
+    [SerializeField] private AudioEffects _audioEffects;
 
     [Header("PixelArtConfig")]
     [SerializeField] private List<Cube> _pixelArtEdging; 
@@ -39,6 +40,7 @@ public class PixelArtBuilder : MonoBehaviour
 
     public event Action<float> UpdateSliderAction;
     public event Action OpenFinishMenu;
+    public event Action<float, float> UpdateResults;
 
     public float BuildCubes => _buildCubes;
     public int MaxCubesCount => _maxCubesCount;
@@ -106,6 +108,7 @@ public class PixelArtBuilder : MonoBehaviour
                 if (cubeColor == point.GetColor() && point.IsFilled == false)
                 {
                     SpawnCube(point);
+                    _audioEffects.PlaySoundCubeBuilding();
                     _buildCubes++;
                     point.Fill();
                     yield return _delaySpawn;
@@ -119,6 +122,8 @@ public class PixelArtBuilder : MonoBehaviour
         yield return _second;
 
         OpenFinishMenu?.Invoke();
+        UpdateResults?.Invoke(_buildCubes, _maxCubesCount);
+
         _allCubeList = GetListAllCubes();
 
         foreach (Cube cube in _allCubeList)
@@ -134,6 +139,7 @@ public class PixelArtBuilder : MonoBehaviour
         while (_pixelArtBuilt == false)
         {
             Instantiate(_boomEffect, GetRandomPosition(), Quaternion.identity);
+            _audioEffects.PlaySoundKnock();
             yield return _delayEffect;
         }
     }
