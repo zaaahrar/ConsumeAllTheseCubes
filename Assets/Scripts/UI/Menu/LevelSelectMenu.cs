@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class LevelSelectMenu : MonoBehaviour
 {
+    private const string LevelKey = "Level";
     private const int One = 1;
 
     [SerializeField] private Button _nextButton;
@@ -23,10 +24,7 @@ public class LevelSelectMenu : MonoBehaviour
 
     private void Awake() => _levelButtons = GetComponentsInChildren<LevelButton>();
 
-    private void Start()
-    {
-        CheckLevels();
-    }
+    private void Start() => CheckLevels();
 
     public void ClickNext()
     {
@@ -50,31 +48,29 @@ public class LevelSelectMenu : MonoBehaviour
         _sceneChanger.LoadGameScene();
     }
 
-    public void CheckLevels()
+    private void CheckLevels()
     {
-        for(int i = 0; i < _levelButtons.Length; i++)
+        for (int i = 0; i < _levelButtons.Length; i++)
         {
-            bool isPassed = PlayerPrefs.GetInt("Level" + (i + One)) == 1;
+            bool isPassed = PlayerPrefs.GetInt(LevelKey + (i + One)) == 1;
 
             if (isPassed)
-            {
                 _unLockedLevel++;
-            }
-
-            Refresh();
         }
+
+        Refresh();
     }
 
-    public void Refresh()
+    private void Refresh()
     {
         _totalPage = _totalLevel / _pageItem;
         _totalPage--;
         int index = _page * _pageItem;
 
-        for(int i = 0; i < _levelButtons.Length; i++)
+        for (int i = 0; i < _levelButtons.Length; i++)
         {
             int level = index + i + One;
-            
+
             if (level <= _totalLevel)
             {
                 _levelButtons[i].gameObject.SetActive(true);
@@ -99,8 +95,6 @@ public class LevelSelectMenu : MonoBehaviour
 
     private void HideAllStars()
     {
-        Debug.Log("Hide!!");
-
         for (int i = 0; i < _levelButtons.Length; i++)
         {
             _levelButtons[i].HideStars();

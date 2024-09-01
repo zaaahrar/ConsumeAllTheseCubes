@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class LevelButton : MonoBehaviour
 {
+    private const string LevelDataKey = "LevelData";
+
     [SerializeField] private GameObject _lockPanel;
     [SerializeField] private TMP_Text _levelText;
     [SerializeField] private LevelSelectMenu _levelSelectMenu;
@@ -26,18 +28,7 @@ public class LevelButton : MonoBehaviour
 
     public void OnClick()
     {
-        LevelConfigTemplate levelConfig = new LevelConfigTemplate();
-        levelConfig.LevelNumber = _level;
-        levelConfig.CountCubes = _countCubes;
-        levelConfig.SpawnPoints = _spawnPoints;
-        levelConfig.Colors = _colorCubes;
-        levelConfig.Time = _time;
-        levelConfig.SpawnPointsPixels = _spawnPointsPixels;
-        levelConfig.SpawnPointsEdging = _spawnPointsEdging;
-        levelConfig.ColorPixels = _colorPixels;
-
-        string json = JsonUtility.ToJson(levelConfig);
-        PlayerPrefs.SetString("LevelData", json);
+        WriteConfig();
         _levelSelectMenu.StartLevel(_level);
     }
 
@@ -50,7 +41,6 @@ public class LevelButton : MonoBehaviour
         _colorCubes = ess.Color;
     }
 
-
     [ContextMenu("LoadPixelArtConfig")]
     public void LoadPixelArtConfig()
     {
@@ -61,16 +51,8 @@ public class LevelButton : MonoBehaviour
         _colorPixels = pixelArtCfg.ColorPixels;
     }
 
-    [ContextMenu("DeleteSave")]
-    public void DeleteSave()
-    {
-        PlayerPrefs.DeleteAll();
-    }
-
     public void Setup(int level, bool isUnlock)
     {
-
-
         _level = level;
         _levelText.text = _level.ToString();
 
@@ -79,7 +61,6 @@ public class LevelButton : MonoBehaviour
             _lockPanel.SetActive(false);
             _button.enabled = true;
             _levelText.gameObject.SetActive(true);
-
             DisplayStars();
         }
         else
@@ -90,21 +71,37 @@ public class LevelButton : MonoBehaviour
         }
     }
 
-    public void DisplayStars()
+    public void HideStars()
+    {
+        for (int i = 0; i < _stars.Length; i++)
+        {
+            _stars[i].gameObject.SetActive(false);
+        }
+    }
+
+    private void WriteConfig()
+    {
+        LevelConfigTemplate levelConfig = new LevelConfigTemplate();
+        levelConfig.LevelNumber = _level;
+        levelConfig.CountCubes = _countCubes;
+        levelConfig.SpawnPoints = _spawnPoints;
+        levelConfig.Colors = _colorCubes;
+        levelConfig.Time = _time;
+        levelConfig.SpawnPointsPixels = _spawnPointsPixels;
+        levelConfig.SpawnPointsEdging = _spawnPointsEdging;
+        levelConfig.ColorPixels = _colorPixels;
+
+        string levelConfigJson = JsonUtility.ToJson(levelConfig);
+        PlayerPrefs.SetString(LevelDataKey, levelConfigJson);
+    }
+
+    private void DisplayStars()
     {
         int starsCount = PlayerPrefs.GetInt("StarsLevel" + _level);
 
         for (int i = 0; i < starsCount; i++)
         {
             _stars[i].gameObject.SetActive(true);
-        }
-    }
-
-    public void HideStars()
-    {
-        for (int i = 0; i < _stars.Length; i++)
-        {
-            _stars[i].gameObject.SetActive(false);
         }
     }
 }

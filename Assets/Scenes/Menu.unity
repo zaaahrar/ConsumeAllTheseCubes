@@ -22413,7 +22413,7 @@ MonoBehaviour:
   _audioFeedback: {fileID: 1595546733}
   _pageCounterText: {fileID: 1745196460}
   _totalLevel: 40
-  _unLockedLevel: 2
+  _unLockedLevel: 1
 --- !u!1001 &920052578
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31873,8 +31873,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 1595546734}
   _soundClick: {fileID: 8300000, guid: 97c637797b5e0544eb023b0382d580d7, type: 3}
-  _resultsPanelAudio: {fileID: 0}
-  _panelsAudio: {fileID: 0}
+  _resultsPanelAudio: {fileID: 8300000, guid: 2667a0a008b044e218b63df62e2be749, type: 3}
+  _panelsAudio: {fileID: 8300000, guid: 0c008ee3ee72a4362a35be25fa5de043, type: 3}
 --- !u!82 &1595546734
 AudioSource:
   m_ObjectHideFlags: 0

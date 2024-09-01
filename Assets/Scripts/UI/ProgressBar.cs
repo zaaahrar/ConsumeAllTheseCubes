@@ -24,7 +24,7 @@ public class ProgressBar : Bar
 
     public override void OnSliderValueChanged(float value)
     {
-        if(_currentCoroutine != null)
+        if (_currentCoroutine != null)
             StopCoroutine(_currentCoroutine);
 
         _currentCoroutine = StartCoroutine(ChangeProgress(value));

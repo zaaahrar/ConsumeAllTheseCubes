@@ -7,8 +7,12 @@ using System;
 
 public class PixelArtBuilder : MonoBehaviour
 {
+    private const string CubeDataKey = "CubeData";
+    private const string LevelDataKey = "LevelData";
+    private const string LevelKey = "Level";
     private const int Second = 1;
-    private const int DefaultValue = 1;
+    private const int DevisorHalf = 2;
+    private const int ValueTrue = 1;
 
     [SerializeField] private List<string> _cubesColor;
     [SerializeField] private List<PixelPoint> _pixelPointsList;
@@ -21,8 +25,8 @@ public class PixelArtBuilder : MonoBehaviour
     [SerializeField] private AudioEffects _audioEffects;
 
     [Header("PixelArtConfig")]
-    [SerializeField] private List<Cube> _pixelArtEdging; 
-    [SerializeField] private List<Vector3> _positionEdging; 
+    [SerializeField] private List<Cube> _pixelArtEdging;
+    [SerializeField] private List<Vector3> _positionEdging;
     [SerializeField] private List<Vector3> _positionPoint;
     [SerializeField] private List<string> _colorPixels;
 
@@ -56,7 +60,7 @@ public class PixelArtBuilder : MonoBehaviour
 
     private void Start()
     {
-        _pixelPointsList = GetListPoints();
+        _pixelPointsList = _parentPoints.GetComponentsInChildren<PixelPoint>().ToList();
 
         StartCoroutine(BuildPixelArt());
         StartCoroutine(SpawnEffect());
@@ -72,7 +76,7 @@ public class PixelArtBuilder : MonoBehaviour
             _positionEdging.Add(new Vector3(cube.transform.position.x, cube.transform.position.y, cube.transform.position.z));
         }
 
-        foreach(var pixelPoint in _pixelPointsList)
+        foreach (var pixelPoint in _pixelPointsList)
         {
             _positionPoint.Add(pixelPoint.transform.position);
             _colorPixels.Add(pixelPoint.GetColor());
@@ -86,13 +90,6 @@ public class PixelArtBuilder : MonoBehaviour
         Debug.Log(json);
 
         PlayerPrefs.SetString("PixelArtConfig", json);
-    }
-
-    private void GetData()
-    {
-        string json = PlayerPrefs.GetString("LevelData");
-        LevelConfigTemplate levelConfig = JsonUtility.FromJson<LevelConfigTemplate>(json);
-        _maxCubesCount = levelConfig.CountCubes;
     }
 
     private IEnumerator BuildPixelArt()
@@ -124,12 +121,13 @@ public class PixelArtBuilder : MonoBehaviour
         OpenFinishMenu?.Invoke();
         UpdateResults?.Invoke(_buildCubes, _maxCubesCount);
 
-        _allCubeList = GetListAllCubes();
+        _allCubeList = _parentSubstrate.GetComponentsInChildren<Cube>().ToList();
 
         foreach (Cube cube in _allCubeList)
             cube.Rigidbody.isKinematic = false;
 
-        SaveComplatedLevel();
+        if (_buildCubes > _maxCubesCount / DevisorHalf)
+            SaveComplatedLevel();
     }
 
     private IEnumerator SpawnEffect()
@@ -144,25 +142,18 @@ public class PixelArtBuilder : MonoBehaviour
         }
     }
 
-    private List<PixelPoint> GetListPoints()
+    private void GetData()
     {
-        PixelPoint[] pixelPoints = _parentPoints.GetComponentsInChildren<PixelPoint>();
-        return pixelPoints.ToList();
-    }
-
-    private List<Cube> GetListAllCubes()
-    {
-        Cube[] cubes = _parentSubstrate.GetComponentsInChildren<Cube>();
-        return cubes.ToList();
+        string json = PlayerPrefs.GetString(LevelDataKey);
+        LevelConfigTemplate levelConfig = JsonUtility.FromJson<LevelConfigTemplate>(json);
+        _maxCubesCount = levelConfig.CountCubes;
     }
 
     private void SpawnCube(PixelPoint pixelPoint)
     {
         Cube cube = Instantiate(pixelPoint.CubePrefab, GetRandomPosition(), Quaternion.identity, _parentSubstrate);
         cube.Rigidbody.isKinematic = true;
-
         cube.transform.DOMove(pixelPoint.transform.position, _cubeFlightTime).SetEase(Ease.OutFlash);
-
     }
 
     private Vector3 GetRandomPosition()
@@ -176,15 +167,14 @@ public class PixelArtBuilder : MonoBehaviour
 
     private void SaveComplatedLevel()
     {
-        string json = PlayerPrefs.GetString("LevelData");
+        string json = PlayerPrefs.GetString(LevelDataKey);
         LevelConfigTemplate levelConfig = JsonUtility.FromJson<LevelConfigTemplate>(json);
-
-        PlayerPrefs.SetInt("Level" + levelConfig.LevelNumber, DefaultValue);
+        PlayerPrefs.SetInt(LevelKey + levelConfig.LevelNumber, ValueTrue);
     }
 
     private void LoadCubeData()
     {
-        string json = PlayerPrefs.GetString("CubeData");
+        string json = PlayerPrefs.GetString(CubeDataKey);
         CubeListDTO cubeDTO = JsonUtility.FromJson<CubeListDTO>(json);
         _cubesColor = cubeDTO.Colors;
     }

@@ -3669,7 +3669,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 611778853}
-  _maxDelta: 8
+  _maxDelta: 0
   _increasingFunnel: {fileID: 892010625}
 --- !u!1 &616181260
 GameObject:
@@ -14310,7 +14310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 2105834473}
-  _maxDelta: 10
+  _maxDelta: 20
   _cubeCounter: {fileID: 1017474556}
   _sceneChanger: {fileID: 859654802}
   _progressText: {fileID: 1409501349}

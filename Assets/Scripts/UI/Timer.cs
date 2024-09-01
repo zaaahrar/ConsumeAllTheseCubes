@@ -15,13 +15,13 @@ public class Timer : MonoBehaviour
 
     public int TimerDuration => _timerDuration;
 
-    public void ChangeTime(int value) => _timerDuration = value;
-
     private void Start()
     {
         _delaySecond = new WaitForSeconds(Second);
         StartCoroutine(StartTimer());
     }
+
+    public void ChangeTime(int value) => _timerDuration = value;
 
     private IEnumerator StartTimer()
     {

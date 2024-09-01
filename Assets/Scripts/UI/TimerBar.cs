@@ -1,6 +1,6 @@
 using UnityEngine;
-using System.Collections;
 using TMPro;
+using System.Collections;
 
 public class TimerBar : Bar
 {

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class BuildEdging : MonoBehaviour
 {
+    private const string LevelDataKey = "LevelData";
+
     [SerializeField] private GameObject _blackCube;
     [SerializeField] private PixelPoint[] _pixelPointPrefabs;
     [SerializeField] private Transform _parentEdging;
@@ -15,34 +17,37 @@ public class BuildEdging : MonoBehaviour
 
     private void Awake()
     {
-        string json = PlayerPrefs.GetString("LevelData");
+        Initialize();
+        SpawnCube();
+        SpawnPixelPoint();
+    }
+
+    private void Initialize()
+    {
+        string json = PlayerPrefs.GetString(LevelDataKey);
         LevelConfigTemplate levelConfig = JsonUtility.FromJson<LevelConfigTemplate>(json);
         _spawnPointPixels = levelConfig.SpawnPointsPixels;
         _spawnPointsEdging = levelConfig.SpawnPointsEdging;
         _pointsColors = levelConfig.ColorPixels;
+    }
 
+    private void SpawnCube()
+    {
         foreach (var pointEdging in _spawnPointsEdging)
         {
-            SpawnCube(pointEdging);
-        }
-
-        for(int i = 0; i < _spawnPointPixels.Count; i++)
-        {
-            SpawnPixelPoint(_spawnPointPixels[i], _pointsColors[i]);
+            Instantiate(_blackCube, pointEdging, Quaternion.identity, _parentEdging);
         }
     }
 
-    private void SpawnCube(Vector3 spawnPosition)
+    private void SpawnPixelPoint()
     {
-        Instantiate(_blackCube, spawnPosition, Quaternion.identity, _parentEdging);
-    }
-
-    private void SpawnPixelPoint(Vector3 spawnPosition, string color)
-    {
-        foreach (PixelPoint pixelPoint in _pixelPointPrefabs)
+        for (int i = 0; i < _spawnPointPixels.Count; i++)
         {
-            if (pixelPoint.GetColor() == color)
-                Instantiate(pixelPoint, spawnPosition, Quaternion.identity, _parentPixelPoints);
+            foreach (PixelPoint pixelPoint in _pixelPointPrefabs)
+            {
+                if (pixelPoint.GetColor() == _pointsColors[i])
+                    Instantiate(pixelPoint, _spawnPointPixels[i], Quaternion.identity, _parentPixelPoints);
+            }
         }
     }
 }
