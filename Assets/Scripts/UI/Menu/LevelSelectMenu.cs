@@ -26,13 +26,13 @@ public class LevelSelectMenu : MonoBehaviour
     private void Start()
     {
         CheckLevels();
-        Refresh();
     }
 
     public void ClickNext()
     {
         _audioFeedback.PlaySoundClick();
         _page++;
+        HideAllStars();
         Refresh();
     }
 
@@ -40,6 +40,7 @@ public class LevelSelectMenu : MonoBehaviour
     {
         _audioFeedback.PlaySoundClick();
         _page--;
+        HideAllStars();
         Refresh();
     }
 
@@ -58,8 +59,9 @@ public class LevelSelectMenu : MonoBehaviour
             if (isPassed)
             {
                 _unLockedLevel++;
-                Refresh();
             }
+
+            Refresh();
         }
     }
 
@@ -72,8 +74,8 @@ public class LevelSelectMenu : MonoBehaviour
         for(int i = 0; i < _levelButtons.Length; i++)
         {
             int level = index + i + One;
-
-            if(level <= _totalLevel)
+            
+            if (level <= _totalLevel)
             {
                 _levelButtons[i].gameObject.SetActive(true);
                 _levelButtons[i].Setup(level, level <= _unLockedLevel);
@@ -93,5 +95,15 @@ public class LevelSelectMenu : MonoBehaviour
     {
         _backButton.gameObject.SetActive(_page > 0);
         _nextButton.gameObject.SetActive(_page < _totalPage);
+    }
+
+    private void HideAllStars()
+    {
+        Debug.Log("Hide!!");
+
+        for (int i = 0; i < _levelButtons.Length; i++)
+        {
+            _levelButtons[i].HideStars();
+        }
     }
 }

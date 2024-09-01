@@ -8,7 +8,7 @@ using System;
 public class PixelArtBuilder : MonoBehaviour
 {
     private const int Second = 1;
-    private const int NumericValueTrue = 1;
+    private const int DefaultValue = 1;
 
     [SerializeField] private List<string> _cubesColor;
     [SerializeField] private List<PixelPoint> _pixelPointsList;
@@ -179,8 +179,7 @@ public class PixelArtBuilder : MonoBehaviour
         string json = PlayerPrefs.GetString("LevelData");
         LevelConfigTemplate levelConfig = JsonUtility.FromJson<LevelConfigTemplate>(json);
 
-        int levelNumber = levelConfig.LevelNumber;
-        PlayerPrefs.SetInt("Level" + levelNumber, NumericValueTrue);
+        PlayerPrefs.SetInt("Level" + levelConfig.LevelNumber, DefaultValue);
     }
 
     private void LoadCubeData()

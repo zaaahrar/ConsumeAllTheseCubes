@@ -8,6 +8,7 @@ public class LevelButton : MonoBehaviour
     [SerializeField] private GameObject _lockPanel;
     [SerializeField] private TMP_Text _levelText;
     [SerializeField] private LevelSelectMenu _levelSelectMenu;
+    [SerializeField] private GameObject[] _stars;
 
     [Header("LevelConfig")]
     [SerializeField] private int _countCubes;
@@ -68,6 +69,8 @@ public class LevelButton : MonoBehaviour
 
     public void Setup(int level, bool isUnlock)
     {
+
+
         _level = level;
         _levelText.text = _level.ToString();
 
@@ -76,12 +79,32 @@ public class LevelButton : MonoBehaviour
             _lockPanel.SetActive(false);
             _button.enabled = true;
             _levelText.gameObject.SetActive(true);
+
+            DisplayStars();
         }
         else
         {
             _lockPanel.SetActive(true);
             _button.enabled = false;
             _levelText.gameObject.SetActive(false);
+        }
+    }
+
+    public void DisplayStars()
+    {
+        int starsCount = PlayerPrefs.GetInt("StarsLevel" + _level);
+
+        for (int i = 0; i < starsCount; i++)
+        {
+            _stars[i].gameObject.SetActive(true);
+        }
+    }
+
+    public void HideStars()
+    {
+        for (int i = 0; i < _stars.Length; i++)
+        {
+            _stars[i].gameObject.SetActive(false);
         }
     }
 }

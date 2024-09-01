@@ -4734,7 +4734,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 301353218}
   _soundClick: {fileID: 8300000, guid: 97c637797b5e0544eb023b0382d580d7, type: 3}
-  _panelActiveAudio: {fileID: 8300000, guid: 2667a0a008b044e218b63df62e2be749, type: 3}
+  _resultsPanelAudio: {fileID: 8300000, guid: 2667a0a008b044e218b63df62e2be749, type: 3}
+  _panelsAudio: {fileID: 8300000, guid: 0c008ee3ee72a4362a35be25fa5de043, type: 3}
 --- !u!4 &301353220
 Transform:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ResultsDisplay : MonoBehaviour
@@ -31,8 +32,7 @@ public class ResultsDisplay : MonoBehaviour
     private void DisplayStars(float maxCubesCount, float buildCubes)
     {
         int starsCount = GetNumberStars(maxCubesCount, buildCubes);
-        Debug.Log(starsCount + "stars");
-        Debug.Log(maxCubesCount + " " + buildCubes);
+        SaveStars(starsCount);
 
         for (int i = 0; i<starsCount; i++)
         {
@@ -63,20 +63,20 @@ public class ResultsDisplay : MonoBehaviour
         float progress = (float)buildCubes / maxCubesCount;
 
         if (progress >= oneHundredPercent)
-        {
             return 3;
-        }
         else if (progress >= seventyFivePercent)
-        {
             return 2; 
-        }
         else if (progress >= fiftyPercent)
-        {
             return 1;
-        }
         else
-        {
             return 0; 
-        }
+    }
+
+    private void SaveStars(int value)
+    {
+        string json = PlayerPrefs.GetString("LevelData");
+        LevelConfigTemplate levelConfig = JsonUtility.FromJson<LevelConfigTemplate>(json);
+
+        PlayerPrefs.SetInt("StarsLevel" + levelConfig.LevelNumber, value);
     }
 }
