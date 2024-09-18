@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioEffects : MonoBehaviour
@@ -36,6 +34,7 @@ public class AudioEffects : MonoBehaviour
             _audioSource.Play();
         }
     }
+
     public void PlaySoundCubeBuilding()
     {
         _audioSource.clip = _soundCubeBuilding;

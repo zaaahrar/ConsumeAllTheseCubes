@@ -26,9 +26,7 @@ public class CubeFall : MonoBehaviour
         _collider.isTrigger = true;
 
         transform.position = Vector3.MoveTowards(transform.position, funnel.Center.position, _speed * Time.deltaTime);
-        transform.DORotateQuaternion(rotation, _rotationDuration);
-        Debug.Log($"Cube Fall: {rotation}, {_rotationDuration}");
-
+        transform.DORotateQuaternion(rotation, _rotationDuration).SetLink(gameObject, LinkBehaviour.KillOnDisable);
 
         while (_cube.IsCollected == false)
         {
@@ -39,11 +37,6 @@ public class CubeFall : MonoBehaviour
     }
 
     private void OnDestroy()
-    {
-        transform.DOKill();
-    }
-
-    private void OnDisable()
     {
         transform.DOKill();
     }

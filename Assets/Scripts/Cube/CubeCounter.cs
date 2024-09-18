@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class CubeCounter : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class CubeCounter : MonoBehaviour
     public event Action<float> SliderUpdateEvent;
 
     private Cube[] _allCube;
-    private int _totalCubesCount;
+    private int _totalCubesCount = 0;
+    private int _totalCubesCollected;
 
     public int TotalCubesCount => _totalCubesCount;
 
@@ -27,5 +29,13 @@ public class CubeCounter : MonoBehaviour
         _collectedCubes++;
         _increasingFunnel.CollectCube();
         SliderUpdateEvent?.Invoke(_collectedCubes);
+
+        _totalCubesCollected = Agava.YandexGames.Utility.PlayerPrefs.GetInt(LeaderboardConstants.SCORE_PREFS_KEY, 0) + 1;
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        Agava.YandexGames.Utility.PlayerPrefs.SetInt(LeaderboardConstants.SCORE_PREFS_KEY, _totalCubesCollected);
+        Agava.YandexGames.Utility.PlayerPrefs.Save();
+        Agava.YandexGames.Leaderboard.SetScore(LeaderboardConstants.LEADERBOARD_NAME, _totalCubesCollected);
+#endif
     }
 }

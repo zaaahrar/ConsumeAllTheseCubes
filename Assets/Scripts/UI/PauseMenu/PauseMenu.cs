@@ -1,58 +1,31 @@
 using UnityEngine;
-using DG.Tweening;
-using System.Collections;
 
-[RequireComponent(typeof(Animator))]
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject _pausePanel;
     [SerializeField] private SceneChanger _sceneChanger;
-    [SerializeField] private float _durationAnimate;
-    [SerializeField] private UIAudioFeedback _audioFeedback;
+    [SerializeField] private PauseMenuView _menuView;
 
-    private float _liftingPositionY = -135;
-    private float _loveringPositionY = 865;
-
-    private void OnDestroy()
+    private void OnEnable()
     {
-        _pausePanel.transform.DOKill();
+        _menuView.OnExitingMenu += ExitMenu;
+        _menuView.OnResetingLevel += ResetLevel;
     }
 
-    public void OpenPanel() => StartCoroutine(OpeningPanel());
-
-    public void ClosePanel() => StartCoroutine(ClosingPanel());
+    private void OnDisable()
+    {
+        _menuView.OnExitingMenu -= ExitMenu;
+        _menuView.OnResetingLevel -= ResetLevel;
+    }
 
     public void ExitMenu()
     {
         Time.timeScale = 1;
-        _audioFeedback.PlaySoundClick();
         _sceneChanger.LoadMenuScene();
     }
 
     public void ResetLevel()
     {
         Time.timeScale = 1;
-        _audioFeedback.PlaySoundClick();
         _sceneChanger.LoadGameScene();
-    }
-
-    private IEnumerator ClosingPanel()
-    {
-        Time.timeScale = 1;
-        _audioFeedback.PlaySoundClick();
-        _pausePanel.transform.DOLocalMoveY(_loveringPositionY, _durationAnimate);
-        Debug.Log($"OpenPanel: {_loveringPositionY}, {_durationAnimate}");
-        yield return new WaitForSeconds(_durationAnimate);
-        _pausePanel.SetActive(false);
-    }
-
-    private IEnumerator OpeningPanel()
-    {
-        _pausePanel.SetActive(true);
-        _audioFeedback.PlaySoundPanelsActive();
-        _pausePanel.transform.DOLocalMoveY(_liftingPositionY, _durationAnimate);
-        Debug.Log($"ClosePanel: {_liftingPositionY}, {_durationAnimate}");
-        yield return new WaitForSeconds(_durationAnimate);
-        Time.timeScale = 0;
     }
 }

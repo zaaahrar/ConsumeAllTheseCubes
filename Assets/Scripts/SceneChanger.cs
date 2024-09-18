@@ -3,9 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class SceneChanger : MonoBehaviour
 {
-    private const int MenuSceneIndex = 0;
-    private const int GameSceneIndex = 1;
-    private const int PixelArtSceneIndex = 2;
+    private const int MenuSceneIndex = 1;
+    private const int GameSceneIndex = 2;
+    private const int PixelArtSceneIndex = 3;
 
     public void LoadMenuScene() => SceneManager.LoadScene(MenuSceneIndex);
 

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CubeChecker : MonoBehaviour
@@ -7,8 +6,6 @@ public class CubeChecker : MonoBehaviour
     [SerializeField] private List<Cube> _collectedCubesList;
     [SerializeField] private List<string> _cubesColorList;
     [SerializeField] private CubeCounter _cubeCounter;
-
-    private void Start() => SaveCubeData(null);
 
     private void OnTriggerEnter(Collider other)
     {
@@ -28,6 +25,6 @@ public class CubeChecker : MonoBehaviour
         CubeListDTO cubeDTO = new CubeListDTO();
         cubeDTO.Colors = cubesColorList;
         string json = JsonUtility.ToJson(cubeDTO);
-        PlayerPrefs.SetString("CubeData", json);
+        PlayerPrefs.SetString(PlayerPrefsKeys.CubeDataKey, json);
     }
 }
